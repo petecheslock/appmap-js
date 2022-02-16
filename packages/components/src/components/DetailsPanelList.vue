@@ -96,26 +96,27 @@ export default {
 
 <style scoped lang="scss">
 .v-details-panel-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0 -1rem 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: $border-radius;
+  padding: 0.5rem;
+  color: $base03;
+  background-color: rgba(0, 0, 0, 0.1);
 
   h5 {
-    border-bottom: 1px solid #333a4d;
-    color: $base03;
+    margin: 0 0 0.25rem;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
     font-size: 0.75rem;
-    font-weight: 700;
-    line-height: 1.4;
-    margin: 0;
-    padding: 0.25rem 1rem;
+    font-weight: bold;
     text-transform: uppercase;
+    color: $base03;
+    background-color: $base11;
   }
 
   ul {
-    list-style-type: none;
+    margin: 0;
     padding: 0;
-    margin-bottom: 1.5rem;
-    margin-top: 0;
+    list-style-type: none;
 
     .list-item {
       position: relative;
@@ -123,17 +124,17 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.25rem 1rem;
+      padding: 0.25rem 0;
       min-height: 2rem;
       font-size: 0.9em;
-      color: $light-purple;
+      color: $base03;
       cursor: pointer;
       overflow: hidden;
       z-index: 0;
 
       &:hover,
       &:active {
-        color: $light-purple2;
+        color: $base06;
       }
 
       &__count {

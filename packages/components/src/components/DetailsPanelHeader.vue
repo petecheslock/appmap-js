@@ -13,17 +13,14 @@
         {{ item.name }}
       </div>
     </div>
-    <h4
+    <h4 class="details-panel-header__details-name" :if="title">{{ title }}</h4>
+    <p
       class="details-panel-header__details-type"
       :data-type="objectType.toLowerCase()"
     >
       {{ objectType }}
-      <span v-if="objectId">{{ objectId }}</span>
-    </h4>
-    <h4 class="details-panel-header__details-name" :if="title">{{ title }}</h4>
-    <div class="details-panel-header__ghost-link">
-      <slot name="links" />
-    </div>
+      <span v-if="objectId">#{{ objectId }}</span>
+    </p>
   </div>
 </template>
 
@@ -120,37 +117,31 @@ export default {
     justify-content: flex-start;
     align-items: flex-start;
     flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
   &__parent {
     position: relative;
-    margin: 0 1rem 0.5rem 0;
     border-radius: $border-radius;
-    padding: 0.3rem 0.5rem;
+    padding: 0.25rem 0.5rem;
     display: inline-flex;
     align-items: center;
+    font-size: 0.75rem;
+    line-height: 14px;
     background: $blue;
     cursor: pointer;
+
     &:hover,
     &:active {
       background: $lightblue;
     }
-    &::after {
-      content: '❯';
-      position: absolute;
-      top: 50%;
-      left: 100%;
-      margin-left: 0.3rem;
-      transform: translateY(-50%);
-      font-size: 0.6rem;
-      pointer-events: none;
-    }
+
     &-icon {
-      margin-right: 0.5rem;
-      width: 1rem;
-      height: 1rem;
-      min-width: 1rem;
-      min-height: 1rem;
+      margin-right: 0.25rem;
+      width: 0.75rem;
+      height: 0.75rem;
+      min-width: 0.75rem;
+      min-height: 0.75rem;
       &:empty {
         display: none;
       }
@@ -160,13 +151,19 @@ export default {
     }
   }
 
+  &__details-name {
+    margin: 0 0 0.2rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: $gray6;
+  }
+
   &__details-type {
+    margin: 0;
     color: $gray4;
     text-transform: uppercase;
     font-size: 0.75rem;
     line-height: 1;
-    font-weight: 700;
-    margin: 0 0 0.2rem;
 
     &[data-type='http'],
     &[data-type='route'] {
@@ -189,23 +186,6 @@ export default {
     &[data-type='sql query'] {
       color: $royal;
     }
-  }
-
-  &__details-name {
-    color: $gray6;
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-top: 0;
-    margin-bottom: 0.8rem;
-  }
-
-  &__ghost-link {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 0.5rem;
   }
 }
 </style>
