@@ -29,10 +29,21 @@
         :is-root-object="isRootObject"
         :filters-root-objects="filtersRootObjects"
       />
-      <v-details-panel-labels
-        v-if="selectedObject && selectedObject.labels"
-        :items="Array.from(selectedObject.labels)"
-      />
+      <v-list
+        v-if="
+          selectedObject && selectedObject.labels && selectedObject.labels.size
+        "
+        title="Labels"
+        itemsType="cloud"
+      >
+        <v-list-item
+          v-for="(item, index) in Array.from(selectedObject.labels)"
+          :key="index"
+          @click.native="selectLabel(item)"
+        >
+          {{ item }}
+        </v-list-item>
+      </v-list>
       <v-details-label
         v-if="selectedLabel"
         :label="selectedLabel"
@@ -57,8 +68,10 @@ import VDetailsPanelPackage from '@/components/DetailsPanelPackage.vue';
 import VDetailsPanelQuery from '@/components/DetailsPanelQuery.vue';
 import VDetailsPanelRoute from '@/components/DetailsPanelRoute.vue';
 import VDetailsPanelExternalService from '@/components/DetailsPanelExternalService.vue';
-import VDetailsPanelLabels from '@/components/DetailsPanelLabels.vue';
 import VDetailsSearch from '@/components/DetailsSearch.vue';
+import VList from '@/components/common/List.vue';
+import VListItem from '@/components/common/ListItem.vue';
+import { SELECT_LABEL } from '../store/vsCode';
 
 export default {
   name: 'v-details-panel',
@@ -76,8 +89,9 @@ export default {
     VDetailsPanelQuery,
     VDetailsPanelRoute,
     VDetailsPanelExternalService,
-    VDetailsPanelLabels,
     VDetailsSearch,
+    VList,
+    VListItem,
   },
   props: {
     subtitle: String,
@@ -116,6 +130,9 @@ export default {
   methods: {
     viewSource() {
       this.$root.$emit('viewSource', this.appMap.metadata.source_location);
+    },
+    selectLabel(label) {
+      this.$store.commit(SELECT_LABEL, label);
     },
   },
 };

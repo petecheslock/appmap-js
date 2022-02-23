@@ -1,38 +1,42 @@
 <template>
-  <div class="v-details-panel-list" v-if="items && items.length > 0">
-    <h5>{{ title }}</h5>
-    <ul>
-      <li
-        class="list-item"
-        v-for="(item, index) in filteredItems"
-        :key="index"
-        @click="selectItem(item)"
+  <v-list
+    class="v-details-panel-list"
+    v-if="items && items.length > 0"
+    :title="title"
+  >
+    <v-list-item
+      v-for="(item, index) in filteredItems"
+      :key="index"
+      @click.native="selectItem(item)"
+    >
+      {{ nameOf(item.object) }}
+      <span class="list-item__count" v-if="uniqueItems && item.count > 1">
+        {{ item.count }}
+      </span>
+      <span
+        class="list-item__event-quickview"
+        v-if="eventQuickview"
+        @click.stop="focusEvent(item)"
+        title="View event in Trace view"
       >
-        {{ nameOf(item.object) }}
-        <span class="list-item__count" v-if="uniqueItems && item.count > 1">
-          {{ item.count }}
-        </span>
-        <span
-          class="list-item__event-quickview"
-          v-if="eventQuickview"
-          @click.stop="focusEvent(item)"
-          title="View event in Trace view"
-        >
-          <EyeIcon />
-        </span>
-      </li>
-    </ul>
-  </div>
+        <EyeIcon />
+      </span>
+    </v-list-item>
+  </v-list>
 </template>
 
 <script>
 import EyeIcon from '@/assets/eye.svg';
+import VList from '@/components/common/List.vue';
+import VListItem from '@/components/common/ListItem.vue';
 import { SELECT_OBJECT, SET_FOCUSED_EVENT } from '@/store/vsCode';
 
 export default {
   name: 'v-details-panel-list',
   components: {
     EyeIcon,
+    VList,
+    VListItem,
   },
   props: {
     title: String,
@@ -95,89 +99,34 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.v-details-panel-list {
-  margin-bottom: 1rem;
-  border-radius: $border-radius;
-  padding: 0.5rem;
-  color: $base03;
-  background-color: rgba(0, 0, 0, 0.1);
+.list-item__count {
+  margin-left: 1rem;
+  border-radius: 0.5rem;
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  line-height: 1;
+  color: currentColor;
+  background-color: rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+}
 
-  h5 {
-    margin: 0 0 0.25rem;
-    border-radius: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: $base03;
-    background-color: $base11;
+.list-item__event-quickview {
+  margin-left: 1rem;
+  padding: 0.25rem;
+  color: $gray4;
+  line-height: 0;
+  cursor: pointer;
+
+  &:hover,
+  &:active {
+    color: $gray5;
   }
 
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-
-    .list-item {
-      position: relative;
-      border-bottom: 1px solid #333a4d;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.25rem 0;
-      min-height: 2rem;
-      font-size: 0.9em;
-      color: $base03;
-      cursor: pointer;
-      overflow: hidden;
-      z-index: 0;
-
-      &:hover,
-      &:active {
-        color: $base06;
-      }
-
-      &__count {
-        margin-left: 1rem;
-        border-radius: 0.5rem;
-        display: inline-block;
-        padding: 0.25rem 0.5rem;
-        font-size: 0.8rem;
-        line-height: 1;
-        color: currentColor;
-        background-color: rgba(0, 0, 0, 0.2);
-        white-space: nowrap;
-      }
-
-      &__event-quickview {
-        margin-left: 1rem;
-        padding: 0.25rem;
-        color: $gray4;
-        line-height: 0;
-        cursor: pointer;
-
-        &:hover,
-        &:active {
-          color: $gray5;
-        }
-
-        svg {
-          width: 1rem;
-          height: 1rem;
-          fill: currentColor;
-        }
-      }
-    }
-
-    li {
-      border-bottom: 1px solid $base15;
-      transition: $transition;
-
-      &:hover,
-      &:active {
-        color: $base06;
-      }
-    }
+  svg {
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
   }
 }
 </style>
