@@ -15,7 +15,12 @@
         :key="index"
         :name="param.name"
         :value="param.value"
-      />
+      >
+        <FindReferencesIcon
+          class="details-panel-event__find-references"
+          @click="setReference(param)"
+        />
+      </v-list-item-param>
     </v-list>
 
     <v-list v-if="hasMessage" title="Parameters">
@@ -25,7 +30,12 @@
         :name="param.name"
         :className="param.class"
         :value="param.value"
-      />
+      >
+        <FindReferencesIcon
+          class="details-panel-event__find-references"
+          @click="setReference(param)"
+        />
+      </v-list-item-param>
     </v-list>
 
     <v-list v-if="requestHeaders.length" title="Request headers">
@@ -72,7 +82,17 @@
       <v-list-item-param
         :name="object.returnValue.class"
         :value="object.returnValue.value"
-      />
+      >
+        <FindReferencesIcon
+          class="details-panel-event__find-references"
+          @click="
+            setReference({
+              name: object.returnValue.class,
+              ...object.returnValue,
+            })
+          "
+        />
+      </v-list-item-param>
     </v-list>
 
     <v-details-panel-list title="Caller" :items="caller" />
@@ -82,6 +102,8 @@
 
 <script>
 import { getSqlLabel } from '@appland/models';
+import { SELECT_REFERENCE } from '@/store/vsCode';
+import FindReferencesIcon from '@/assets/find-references.svg';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 import VList from '@/components/common/List.vue';
@@ -91,6 +113,7 @@ import VSqlCode from '@/components/SqlCode.vue';
 export default {
   name: 'v-details-panel-event',
   components: {
+    FindReferencesIcon,
     VDetailsPanelList,
     VDetailsPanelHeader,
     VList,
@@ -182,6 +205,12 @@ export default {
       return this.object.parent ? [this.object.parent] : null;
     },
   },
+
+  methods: {
+    setReference(param) {
+      this.$store.commit(SELECT_REFERENCE, param);
+    },
+  },
 };
 </script>
 
@@ -195,6 +224,15 @@ export default {
 .details-panel-event {
   h3 {
     padding: 0;
+  }
+
+  &__find-references {
+    flex-shrink: 0;
+    margin-left: auto;
+    width: 16px;
+    height: 17px;
+    fill: #bababa;
+    cursor: pointer;
   }
 }
 </style>
